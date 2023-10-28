@@ -17,7 +17,6 @@
     "moduleResolution": "NodeNext",
     "allowImportingTsExtensions": true,
     "noEmit": true,
-    "jsx": "react",
     "forceConsistentCasingInFileNames": true
   }
 }
