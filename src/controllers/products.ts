@@ -7,9 +7,9 @@
 */
 
 import { Request, Response } from 'express'
-import Products from '../model/Products.ts'
+import Products from '../model/Products'
 import { StatusCodes } from 'http-status-codes'
-import { BadRequestError } from '../errors/customErrors.ts'
+import { BadRequestError } from '../errors/customErrors'
 
 const sortBy = (sort: string) => {
   switch (sort) {

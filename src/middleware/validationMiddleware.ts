@@ -1,13 +1,13 @@
 import { body, param, query, validationResult } from 'express-validator'
 import { Request, Response, NextFunction } from 'express'
-import User from '../model/User.ts'
+import User from '../model/User'
 import {
   BadRequestError,
   NotFoundError,
   UnauthorizedError,
-} from '../errors/customErrors.ts'
+} from '../errors/customErrors'
 import { StatusCodes } from 'http-status-codes'
-import Products from '../model/Products.ts'
+import Products from '../model/Products'
 import { Types } from 'mongoose'
 
 export const validationMiddleware = (validate: any) => {

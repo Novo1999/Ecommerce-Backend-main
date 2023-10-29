@@ -1,9 +1,9 @@
-import User from '../model/User.ts'
+import User from '../model/User'
 import { StatusCodes } from 'http-status-codes'
 import bcrypt from 'bcryptjs'
 import { Request, Response } from 'express'
-import { NotFoundError, UnauthenticatedError } from '../errors/customErrors.ts'
-import { createJwt } from '../utils/tokenUtil.ts'
+import { NotFoundError, UnauthenticatedError } from '../errors/customErrors'
+import { createJwt } from '../utils/tokenUtil'
 
 export const registerUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body

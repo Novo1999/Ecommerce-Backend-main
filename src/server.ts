@@ -8,9 +8,9 @@ import cors from 'cors'
 import helmet from 'helmet'
 import bodyParser from 'body-parser'
 import mongoSanitize from 'express-mongo-sanitize'
-import authRouter from './routes/auth.ts'
-import productRouter from './routes/products.ts'
-import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.ts'
+import authRouter from './routes/auth'
+import productRouter from './routes/products'
+import errorHandlerMiddleware from './middleware/errorHandlerMiddleware'
 import { StatusCodes } from 'http-status-codes'
 
 dotenv.config()
@@ -39,14 +39,19 @@ app.use('*', (req, res) => {
 app.use(errorHandlerMiddleware)
 
 const port = process.env.PORT || 6700
-try {
-  await mongoose.connect(process.env.MONGO_URL!)
-  app.listen(port, () => {
-    console.log(`Server listening on port ${port}`)
-  })
-} catch (error) {
-  console.log(error)
-  process.exit(1)
+
+const run = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL!)
+    app.listen(port, () => {
+      console.log(`Server listening on port ${port}`)
+    })
+  } catch (error) {
+    console.log(error)
+    process.exit(1)
+  }
 }
+
+run()
 
 export default app

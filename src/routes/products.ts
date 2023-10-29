@@ -3,8 +3,8 @@ import {
   getAllProducts,
   getProductByCategory,
   getSingleProduct,
-} from '../controllers/products.ts'
-import { validateProduct } from '../middleware/validationMiddleware.ts'
+} from '../controllers/products'
+import { validateProduct } from '../middleware/validationMiddleware'
 
 const router = Router()
 

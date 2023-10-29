@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import { loginUser, logoutUser, registerUser } from '../controllers/auth.ts'
+import { loginUser, logoutUser, registerUser } from '../controllers/auth'
 import {
   validateLoginUser,
   validateRegisterUser,
-} from '../middleware/validationMiddleware.ts'
+} from '../middleware/validationMiddleware'
 
 const router = Router()
 
