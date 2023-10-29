@@ -29,7 +29,11 @@ const sortBy = (sort: string) => {
 // when page loads
 export const getAllProducts = async (req: Request, res: Response) => {
   let { sort } = req.query
-  const products = await Products.find({}).sort(sortBy(sort as string) as any)
+  let products
+  if (!sort) products = await Products.find({})
+
+  products = await Products.find({}).sort(sortBy(sort as string) as any)
+
   res.status(StatusCodes.OK).json(products)
 }
 
