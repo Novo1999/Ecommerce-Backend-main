@@ -22,17 +22,15 @@ const sortBy = (sort: string) => {
     case 'price[z-a]':
       return { price: 'desc' }
     default:
-      throw new BadRequestError('Wrong query')
+      return { name: 'asc' }
   }
 }
 
 // when page loads
 export const getAllProducts = async (req: Request, res: Response) => {
   let { sort } = req.query
-  let products
-  if (!sort) products = await Products.find({})
 
-  products = await Products.find({}).sort(sortBy(sort as string) as any)
+  const products = await Products.find({}).sort(sortBy(sort as string) as any)
 
   res.status(StatusCodes.OK).json(products)
 }
