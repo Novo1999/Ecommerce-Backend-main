@@ -9,7 +9,7 @@ import { validateProduct } from '../middleware/validationMiddleware'
 const router = Router()
 
 router
-  .get('/all-product?:sort', getAllProducts)
+  .get('/all-product?:query', getAllProducts)
   .get('/product/:id', validateProduct, getSingleProduct)
   .get('/product?:category', getProductByCategory)
 

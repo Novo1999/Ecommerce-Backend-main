@@ -9,7 +9,7 @@
 import { Request, Response } from 'express'
 import Products from '../model/Products'
 import { StatusCodes } from 'http-status-codes'
-import { BadRequestError } from '../errors/customErrors'
+import { BadRequestError, NotFoundError } from '../errors/customErrors'
 
 const sortBy = (sort: string) => {
   switch (sort) {
@@ -28,9 +28,15 @@ const sortBy = (sort: string) => {
 
 // when page loads
 export const getAllProducts = async (req: Request, res: Response) => {
-  let { sort } = req.query
+  let { sort, limit, skip } = req.query
 
-  const products = await Products.find({}).sort(sortBy(sort as string) as any)
+  const products = await Products.find({})
+    .sort(sortBy(sort as string) as any)
+    .limit(Number(limit))
+    .skip(Number(skip))
+
+  console.log(products.length)
+  if (!products) throw new NotFoundError('No available products')
 
   res.status(StatusCodes.OK).json(products)
 }
@@ -56,8 +62,6 @@ export const getProductByCategory = async (req: Request, res: Response) => {
 
   // if no sort was provided, just sort by ascending order
   if (!sort) sort = 'asc'
-
-  // sort by alphabetical order and by price
 
   // match categories with at least one common letter
   const products = await Products.find({
