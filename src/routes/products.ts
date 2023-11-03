@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  getAllCategories,
   getAllProducts,
   getProductByCategory,
   getSingleProduct,
@@ -12,5 +13,6 @@ router
   .get('/all-product?:query', getAllProducts)
   .get('/product/:id', validateProduct, getSingleProduct)
   .get('/product?:category', getProductByCategory)
+  .get('/categories', getAllCategories)
 
 export default router

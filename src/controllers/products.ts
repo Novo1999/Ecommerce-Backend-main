@@ -35,9 +35,6 @@ export const getAllProducts = async (req: Request, res: Response) => {
     .limit(Number(limit))
     .skip(Number(skip))
 
-  console.log(products.length)
-  if (!products) throw new NotFoundError('No available products')
-
   res.status(StatusCodes.OK).json(products)
 }
 
@@ -74,4 +71,9 @@ export const getProductByCategory = async (req: Request, res: Response) => {
       .json({ msg: 'No product by that category' })
 
   res.status(StatusCodes.OK).json(products)
+}
+
+export const getAllCategories = async (req: Request, res: Response) => {
+  const categories = await Products.find({}).distinct('category')
+  res.status(StatusCodes.OK).json(categories)
 }
