@@ -43,19 +43,18 @@ export const getSingleProduct = async (req: Request, res: Response) => {
   const { id } = req.params
   const product = await Products.findById(id)
 
-  // this returns 3 related products that matches the category and makes sure the same product is not returned
-  const relatedProducts = await Products.find({
-    category: product?.category,
-  })
-    .where('_id')
-    .ne(id)
-    .limit(3)
-  res.status(StatusCodes.OK).json({ product, relatedProducts })
+  // First, get a random sample of products excluding the current one
+  const randomProducts = await Products.aggregate([
+    { $match: { _id: { $ne: id }, category: product?.category } }, // Exclude the current product
+    { $sample: { size: 3 } }, // Get a random sample of 3 products
+  ])
+
+  res.status(StatusCodes.OK).json({ product, relatedProducts: randomProducts })
 }
 
 // user chooses category from dropdown or types in url
 export const getProductByCategory = async (req: Request, res: Response) => {
-  let { category, sort } = req.query
+  let { category, sort, skip, limit } = req.query
 
   // if no sort was provided, just sort by ascending order
   if (!sort) sort = 'asc'
@@ -76,4 +75,13 @@ export const getProductByCategory = async (req: Request, res: Response) => {
 export const getAllCategories = async (req: Request, res: Response) => {
   const categories = await Products.find({}).distinct('category')
   res.status(StatusCodes.OK).json(categories)
+}
+
+export const getProductByName = async (req: Request, res: Response) => {
+  const { name } = req.params
+  const product = await Products.find({
+    name: { $regex: `.*${name}`, $options: 'i' },
+  })
+  console.log(name)
+  res.status(StatusCodes.OK).json(product)
 }

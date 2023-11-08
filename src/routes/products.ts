@@ -3,6 +3,7 @@ import {
   getAllCategories,
   getAllProducts,
   getProductByCategory,
+  getProductByName,
   getSingleProduct,
 } from '../controllers/products'
 import { validateProduct } from '../middleware/validationMiddleware'
@@ -14,5 +15,6 @@ router
   .get('/product/:id', validateProduct, getSingleProduct)
   .get('/product?:category', getProductByCategory)
   .get('/categories', getAllCategories)
+  .get('/:name', getProductByName)
 
 export default router
