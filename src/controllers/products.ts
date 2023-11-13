@@ -49,12 +49,20 @@ export const getSingleProduct = async (req: Request, res: Response) => {
     { $sample: { size: 3 } }, // Get a random sample of 3 products
   ])
 
-  res.status(StatusCodes.OK).json({ product, relatedProducts: randomProducts })
+  let refinedRandomProducts: string | Array<{}> = randomProducts.filter(
+    (product) => product._id.toString() !== id
+  )
+  if (refinedRandomProducts.length === 0)
+    refinedRandomProducts = 'No related products'
+
+  res
+    .status(StatusCodes.OK)
+    .json({ product, relatedProducts: refinedRandomProducts })
 }
 
 // user chooses category from dropdown or types in url
 export const getProductByCategory = async (req: Request, res: Response) => {
-  let { category, sort, skip, limit } = req.query
+  let { category, sort } = req.query
 
   // if no sort was provided, just sort by ascending order
   if (!sort) sort = 'asc'
