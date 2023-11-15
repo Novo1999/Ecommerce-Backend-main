@@ -9,7 +9,7 @@ const router = Router()
 
 router
   .post('/register', validateRegisterUser, registerUser)
-  .get('/login', validateLoginUser, loginUser)
+  .post('/login', validateLoginUser, loginUser)
   .get('/logout', logoutUser)
 
 export default router

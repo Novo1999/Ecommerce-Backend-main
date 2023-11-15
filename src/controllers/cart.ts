@@ -3,11 +3,11 @@ import Cart from '../model/Cart'
 import { StatusCodes } from 'http-status-codes'
 import { BadRequestError } from '../errors/customErrors'
 
-interface cartRequest extends Request {
+export interface CartRequest extends Request {
   user?: string
 }
 
-export const doCartOperation = async (req: cartRequest, res: Response) => {
+export const doCartOperation = async (req: CartRequest, res: Response) => {
   const { productId, quantity, name, price } = req.body
 
   const { userId }: any = req.user
@@ -45,4 +45,10 @@ export const doCartOperation = async (req: cartRequest, res: Response) => {
     console.log(error)
     throw new BadRequestError('An error occurred')
   }
+}
+
+export const getUserCart = async (req: CartRequest, res: Response) => {
+  const { userId }: any = req.user
+  const cart = await Cart.find({ userId })
+  res.status(StatusCodes.OK).json(cart)
 }

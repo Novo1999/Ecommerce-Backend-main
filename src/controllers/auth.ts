@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs'
 import { Request, Response } from 'express'
 import { NotFoundError, UnauthenticatedError } from '../errors/customErrors'
 import { createJwt } from '../utils/tokenUtil'
+import { CartRequest } from './cart'
 
 export const registerUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body
@@ -18,9 +19,10 @@ export const registerUser = async (req: Request, res: Response) => {
     password: hashedPassword,
   })
 
-  res
-    .status(StatusCodes.CREATED)
-    .json({ msg: `Successfully registered as ${newUser.name}`, newUser })
+  res.status(StatusCodes.CREATED).json({
+    msg: `Successfully registered as ${newUser.name}. Please Log in Now.`,
+    newUser,
+  })
 }
 
 export const loginUser = async (req: Request, res: Response) => {
@@ -39,12 +41,15 @@ export const loginUser = async (req: Request, res: Response) => {
 
   // sending cookie
   res.cookie('token', token, {
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+    maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
+    sameSite: 'none',
   })
 
-  res.status(StatusCodes.OK).json({ msg: `Welcome ${user.name}` })
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: `Welcome ${user.name}`, email: user.email })
 }
 
 export const logoutUser = async (_: Request, res: Response) => {

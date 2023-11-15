@@ -5,7 +5,7 @@ type Token = {
   email: string
 }
 
-export const createJwt = (payload: { userId: string; email: string }) => {
+export const createJwt = (payload: Token) => {
   return jwt.sign(payload, process.env.JWT_SECRET!, {
     expiresIn: process.env.JWT_TIMEOUT,
   })

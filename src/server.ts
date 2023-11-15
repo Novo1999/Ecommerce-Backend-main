@@ -11,6 +11,7 @@ import mongoSanitize from 'express-mongo-sanitize'
 import authRouter from './routes/auth'
 import productRouter from './routes/products'
 import cartRouter from './routes/cart'
+import userRouter from './routes/user'
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware'
 import { StatusCodes } from 'http-status-codes'
 import { authenticateUser } from './middleware/authMiddleware'
@@ -23,15 +24,22 @@ app.use(express.json())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use(cookieParser())
 app.use(morgan('dev'))
-app.use(cors())
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+)
+app.use(cookieParser())
 app.use(helmet())
+app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
 app.use(mongoSanitize())
 
 app.use('/api/e-commerce/auth', authRouter)
 app.use('/api/e-commerce/products', productRouter)
 app.use('/api/e-commerce/cart', authenticateUser as () => void, cartRouter)
+app.use('/api/e-commerce/', authenticateUser as () => void, userRouter)
 
 app.get('/', (req: Request, res: Response) => {
   res.send('This server works')
