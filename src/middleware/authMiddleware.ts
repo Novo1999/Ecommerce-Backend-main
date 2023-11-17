@@ -18,7 +18,6 @@ export const authenticateUser = (
   next: NextFunction
 ) => {
   const { token } = req.cookies
-  console.log(token)
   if (!token) throw new UnauthenticatedError('authentication invalid')
 
   try {

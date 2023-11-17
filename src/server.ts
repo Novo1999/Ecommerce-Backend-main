@@ -16,6 +16,7 @@ import errorHandlerMiddleware from './middleware/errorHandlerMiddleware'
 import { StatusCodes } from 'http-status-codes'
 import { authenticateUser } from './middleware/authMiddleware'
 import cookieParser from 'cookie-parser'
+import { v2 as cloudinary } from 'cloudinary'
 
 dotenv.config()
 
@@ -31,10 +32,19 @@ app.use(
     credentials: true,
   })
 )
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
+})
+
 app.use(cookieParser())
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
 app.use(mongoSanitize())
+
+app.use(express.static(__dirname))
 
 app.use('/api/e-commerce/auth', authRouter)
 app.use('/api/e-commerce/products', productRouter)

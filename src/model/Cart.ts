@@ -12,6 +12,7 @@ const CartSchema = new Schema(
         name: String,
         price: Number,
         quantity: Number,
+        link: String,
       },
     ],
   },

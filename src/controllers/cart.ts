@@ -8,7 +8,7 @@ export interface CartRequest extends Request {
 }
 
 export const doCartOperation = async (req: CartRequest, res: Response) => {
-  const { productId, quantity, name, price } = req.body
+  const { productId, quantity, name, price, link } = req.body
 
   const { userId }: any = req.user
 
@@ -23,10 +23,11 @@ export const doCartOperation = async (req: CartRequest, res: Response) => {
         let productItem = cart.products[itemIndex]
         if (quantity === 0) productItem.quantity = 0
         productItem.quantity += quantity
+        productItem.price += Number((quantity * price).toFixed(2))
         cart.products[itemIndex] = productItem
       } else {
         // else push the product
-        cart.products.push({ productId, quantity, name, price })
+        cart.products.push({ productId, quantity, name, price, link })
       }
       cart.products = cart.products.filter(
         (productItem) => productItem.quantity !== 0
@@ -37,7 +38,7 @@ export const doCartOperation = async (req: CartRequest, res: Response) => {
       // create new cart if cart does not exist
       const newCart = await Cart.create({
         userId,
-        products: [{ productId, quantity, name, price }],
+        products: [{ productId, quantity, name, price, link }],
       })
       return res.status(StatusCodes.CREATED).send(newCart)
     }

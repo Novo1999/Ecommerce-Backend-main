@@ -90,6 +90,5 @@ export const getProductByName = async (req: Request, res: Response) => {
   const product = await Products.find({
     name: { $regex: `.*${name}`, $options: 'i' },
   })
-  console.log(name)
   res.status(StatusCodes.OK).json(product)
 }
