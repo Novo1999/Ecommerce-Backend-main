@@ -35,8 +35,8 @@ export const validateRegisterUser = validationMiddleware([
   body('name')
     .notEmpty()
     .withMessage('Name cannot be empty')
-    .isLength({ max: 40, min: 5 })
-    .withMessage('Name must be between 5 and 40 characters'),
+    .isLength({ max: 50, min: 3 })
+    .withMessage('Name must be between 3 and 50 characters'),
   body('email')
     .notEmpty()
     .withMessage('Email cannot be empty')

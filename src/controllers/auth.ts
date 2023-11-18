@@ -4,7 +4,6 @@ import bcrypt from 'bcryptjs'
 import { Request, Response } from 'express'
 import { NotFoundError, UnauthenticatedError } from '../errors/customErrors'
 import { createJwt } from '../utils/tokenUtil'
-import { CartRequest } from './cart'
 
 export const registerUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body
@@ -31,7 +30,6 @@ export const loginUser = async (req: Request, res: Response) => {
   const user = await User.findOne({ email })
 
   if (!user) throw new NotFoundError('User not found')
-
   const passwordIsMatched = await bcrypt.compare(password, user.password!)
 
   if (!passwordIsMatched) throw new UnauthenticatedError('invalid credentials')
