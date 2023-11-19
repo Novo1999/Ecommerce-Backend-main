@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(morgan('dev'))
 app.use(
   cors({
-    origin: 'https://gymba-frontend.vercel.app',
+    origin: 'https://gymba.vercel.app',
     credentials: true,
   })
 )
