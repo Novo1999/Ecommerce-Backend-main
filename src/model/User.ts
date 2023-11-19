@@ -4,6 +4,8 @@ const UserSchema = new Schema({
   name: String,
   email: String,
   password: String,
+  avatar: String,
+  avatarPublicId: String,
 })
 
 // delete the password in the response

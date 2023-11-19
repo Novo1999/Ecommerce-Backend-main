@@ -1,5 +1,4 @@
 import multer from 'multer'
-import path from 'path'
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -11,7 +10,7 @@ const storage = multer.diskStorage({
   },
 })
 
-const maxSize = 2 * 1000 * 1024
+const maxSize = 3 * 1000 * 1024
 
 const upload = multer({
   storage,

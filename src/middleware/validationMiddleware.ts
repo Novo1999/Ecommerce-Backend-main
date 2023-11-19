@@ -56,6 +56,27 @@ export const validateRegisterUser = validationMiddleware([
     .withMessage('Password must be at least 6 characters'),
 ])
 
+export const validateUpdateUser = validationMiddleware([
+  body('name')
+    .notEmpty()
+    .withMessage('Name cannot be empty')
+    .isLength({ max: 50, min: 3 })
+    .withMessage('Name must be between 3 and 50 characters'),
+  body('email')
+    .notEmpty()
+    .withMessage('Email cannot be empty')
+    .isEmail()
+    .withMessage('invalid email')
+    .custom(async (email, { req }) => {
+      const { email: currentEmail } = req.user
+      const isUserExist = await User.findOne({ email: email.toLowerCase() })
+      if (isUserExist && email !== currentEmail)
+        throw new BadRequestError(
+          'An user with the email address already exists'
+        )
+    }),
+])
+
 export const validateLoginUser = validationMiddleware([
   body('email')
     .notEmpty()
