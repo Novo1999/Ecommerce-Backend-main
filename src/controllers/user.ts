@@ -1,16 +1,12 @@
 import { Request, Response } from 'express'
 import User from '../model/User'
 import { StatusCodes } from 'http-status-codes'
-import {
-  BadRequestError,
-  NotFoundError,
-  UnauthenticatedError,
-} from '../errors/customErrors'
+import { NotFoundError, UnauthenticatedError } from '../errors/customErrors'
 import Cart from '../model/Cart'
 import bcrypt from 'bcryptjs'
 import { createJwt } from '../utils/tokenUtil'
-import { promises as fs } from 'fs'
 import { v2 as cloudinary } from 'cloudinary'
+import { formatImage } from '../middleware/multerMiddleware'
 
 interface GetCurrentUserRequest extends Request {
   user?: {
@@ -39,9 +35,8 @@ export const editUser = async (req: GetCurrentUserRequest, res: Response) => {
   let avatar
   let avatarPublicId
   if (req.file) {
-    const response = await cloudinary.uploader.upload(req.file.path)
-    // remove the temporary image
-    await fs.unlink(req.file.path)
+    const file = formatImage(req.file)
+    const response = await cloudinary.uploader.upload(file)
     avatar = response.secure_url
     avatarPublicId = response.public_id
   }
