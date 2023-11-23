@@ -41,14 +41,13 @@ export const editUser = async (req: GetCurrentUserRequest, res: Response) => {
     avatarPublicId = response.public_id
   }
 
-  console.log(user)
-
   // if user image already exists, delete that image first
   if (req.file && user.avatarPublicId) {
     await cloudinary.uploader.destroy(user.avatarPublicId)
   }
   if (!email) throw new NotFoundError('User not found')
 
+  // update only one thing(email or password)
   let passwordIsMatched
   if (oldPassword)
     passwordIsMatched = await bcrypt.compare(oldPassword, user.password)
@@ -84,6 +83,7 @@ export const editUser = async (req: GetCurrentUserRequest, res: Response) => {
       secure: true,
       sameSite: 'none',
     })
+
     return res.status(StatusCodes.OK).json(updatedUser)
   }
 }
