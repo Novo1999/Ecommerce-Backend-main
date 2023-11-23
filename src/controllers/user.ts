@@ -34,6 +34,7 @@ export const editUser = async (req: GetCurrentUserRequest, res: Response) => {
 
   let avatar
   let avatarPublicId
+  // file upload
   if (req.file) {
     const file = formatImage(req.file)
     const response = await cloudinary.uploader.upload(file)
@@ -47,8 +48,7 @@ export const editUser = async (req: GetCurrentUserRequest, res: Response) => {
   }
   if (!email) throw new NotFoundError('User not found')
 
-  // update only one thing(email or password)
-
+  // if user does not provide the password, then just edit the other information user changes
   let passwordIsMatched
   if (oldPassword === '' && password === '') {
     passwordIsMatched = true
@@ -56,8 +56,10 @@ export const editUser = async (req: GetCurrentUserRequest, res: Response) => {
     passwordIsMatched = await bcrypt.compare(oldPassword, user.password)
   }
 
+  // if password matches
   if (passwordIsMatched) {
     const salt = await bcrypt.genSalt(10)
+    // hash the password only if the user provided the password
     let hashedPassword
     if (password === '') {
       hashedPassword = user.password
@@ -93,12 +95,6 @@ export const editUser = async (req: GetCurrentUserRequest, res: Response) => {
 
     return res.status(StatusCodes.OK).json(updatedUser)
   } else {
-    throw new UnauthenticatedError('incorrect old password')
+    throw new UnauthenticatedError('Incorrect old password')
   }
 }
-
-// user does not provide password but provides lets say the name, we only want to change the name then.
-
-// so lets say the password is empty, then if there is a name or email, just change whatever there is
-
-// if no password, then get the old password and put it in the old and new password
