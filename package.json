@@ -2,6 +2,9 @@
   "name": "E-commerce",
   "version": "1.0.0",
   "main": "server.ts",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "server": "cd src && nodemon server.ts",
     "dev": "nodemon dist/server.js",
