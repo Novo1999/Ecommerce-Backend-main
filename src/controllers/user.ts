@@ -27,7 +27,7 @@ export const getCurrentUser = async (
 }
 
 export const editUser = async (req: GetCurrentUserRequest, res: Response) => {
-  const { name, email, password, oldPassword } = req.body
+  let { name, email, password, oldPassword } = req.body
   const { email: currentEmail }: any = req.user
   const user = await User.findOne({ email: currentEmail })
   if (!user) throw new NotFoundError('No user')
@@ -48,15 +48,22 @@ export const editUser = async (req: GetCurrentUserRequest, res: Response) => {
   if (!email) throw new NotFoundError('User not found')
 
   // update only one thing(email or password)
-  let passwordIsMatched
-  if (oldPassword)
-    passwordIsMatched = await bcrypt.compare(oldPassword, user.password)
 
-  if (oldPassword && !passwordIsMatched) {
-    throw new UnauthenticatedError('Incorrect old password')
+  let passwordIsMatched
+  if (oldPassword === '' && password === '') {
+    passwordIsMatched = true
   } else {
+    passwordIsMatched = await bcrypt.compare(oldPassword, user.password)
+  }
+
+  if (passwordIsMatched) {
     const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password || user.password, salt)
+    let hashedPassword
+    if (password === '') {
+      hashedPassword = user.password
+    } else {
+      hashedPassword = await bcrypt.hash(password, salt)
+    }
     const updatedUser = await User.findOneAndUpdate(
       { email: currentEmail },
       {
@@ -85,6 +92,8 @@ export const editUser = async (req: GetCurrentUserRequest, res: Response) => {
     })
 
     return res.status(StatusCodes.OK).json(updatedUser)
+  } else {
+    throw new UnauthenticatedError('incorrect old password')
   }
 }
 
