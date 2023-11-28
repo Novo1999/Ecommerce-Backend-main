@@ -39,7 +39,7 @@ export const loginUser = async (req: Request, res: Response) => {
   const oneDay = 1000 * 60 * 60 * 24;
   // sending cookie
   res.cookie('token', token, {
-    expires: new Date(Date.now() + oneDay),
+    maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
     secure: true,
     sameSite: 'none',
@@ -51,11 +51,11 @@ export const loginUser = async (req: Request, res: Response) => {
 }
 
 export const logoutUser = async (_: Request, res: Response) => {
-  res.cookie('token', 'token', {
-    expires: new Date(Date.now()),
+  res.cookie('token', 'logout', {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
+    expires: new Date(Date.now()),
   })
   res.status(StatusCodes.OK).json({ msg: 'user logged out' })
 }
