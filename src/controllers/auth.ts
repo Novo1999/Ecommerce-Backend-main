@@ -36,10 +36,10 @@ export const loginUser = async (req: Request, res: Response) => {
 
   // signing jwt token
   const token = createJwt({ userId: user._id.toString(), email: user.email! })
-
+  const oneDay = 1000 * 60 * 60 * 24;
   // sending cookie
   res.cookie('token', token, {
-    maxAge: 1000 * 60 * 60 * 24,
+    expires: new Date(Date.now() + oneDay),
     httpOnly: true,
     secure: true,
     sameSite: 'none',
@@ -55,7 +55,6 @@ export const logoutUser = async (_: Request, res: Response) => {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
-    maxAge: 0,
     expires: new Date(Date.now())
   })
   res.status(StatusCodes.OK).json({ msg: 'user logged out' })
