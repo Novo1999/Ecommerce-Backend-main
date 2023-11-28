@@ -56,6 +56,7 @@ export const logoutUser = async (_: Request, res: Response) => {
     secure: true,
     sameSite: 'none',
     maxAge: 0,
+    expires: new Date(Date.now())
   })
   res.status(StatusCodes.OK).json({ msg: 'user logged out' })
 }
