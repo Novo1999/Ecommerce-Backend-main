@@ -6,7 +6,7 @@
     "server": "cd src && nodemon server.ts",
     "dev": "nodemon dist/server.js",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.4",
