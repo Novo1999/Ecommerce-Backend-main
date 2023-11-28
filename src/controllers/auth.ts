@@ -50,7 +50,7 @@ export const loginUser = async (req: Request, res: Response) => {
     .json({ msg: `Welcome ${user.name}`, email: user.email })
 }
 
-export const logoutUser = async (_: Request, res: Response) => {
+export const logout = async (_: Request, res: Response) => {
   res.cookie('token', 'logout', {
     httpOnly: true,
     secure: true,
