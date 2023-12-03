@@ -19,7 +19,7 @@ export const checkout = async (req: Request, res: Response) => {
       description: 'Product',
       payment_method: id,
       confirm: true,
-      return_url: 'http://gymba.vercel.app/',
+      return_url: 'https://gymba.vercel.app/',
     })
     console.log(payment)
     res.json({
