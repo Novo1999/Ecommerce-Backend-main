@@ -44,7 +44,7 @@ export const doCartOperation = async (req: CartRequest, res: Response) => {
     }
   } catch (error) {
     console.log(error)
-    throw new BadRequestError('An error occurred')
+    throw new BadRequestError(error)
   }
 }
 
@@ -52,4 +52,14 @@ export const getUserCart = async (req: CartRequest, res: Response) => {
   const { userId }: any = req.user
   const cart = await Cart.find({ userId })
   res.status(StatusCodes.OK).json(cart)
+}
+
+export const clearCart = async (req: CartRequest, res: Response) => {
+  const { userId }: any = req.user
+  const cart = await Cart.findOneAndDelete({ userId })
+  if (cart) {
+    return res.status(StatusCodes.OK).json({ msg: 'Cart Cleared' })
+  } else {
+    return res.status(StatusCodes.OK).json({ msg: 'No item' })
+  }
 }
